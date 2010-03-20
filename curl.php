@@ -264,11 +264,11 @@ class Curl {
 
 		$this->url = $url;
 
-		$this->connect();
+		$this->Connect();
 
 		if (!is_null($this->url))
 		{
-			$this->execute();
+			$this->Execute();
 		}
 	}
 	
@@ -279,7 +279,7 @@ class Curl {
 	 * @return void
 	 * @access public
 	 */
-	public function close()
+	public function Close()
 	{
 		curl_close($this->_rCh);
 	}
@@ -292,7 +292,7 @@ class Curl {
 	 * @access public
 	 * @todo add CURLOPT_FRESH_CONNECT
 	 */
-	public function connect()
+	public function Connect()
 	{
 		if (!is_resource($this->_rCh))
 		{
@@ -313,12 +313,12 @@ class Curl {
 	 * @return string
 	 * @access public
 	 */
-	public function error()
+	public function Error()
 	{
 		$this->lastError = curl_error($this->_rCh);
 		if (empty($this->lastError))
 		{
-			if ((int)$this->info('http_code') >= 400)
+			if ((int)$this->Info('http_code') >= 400)
 			{
 				$this->lastError = $this->info['http_code'];
 			}
@@ -333,7 +333,7 @@ class Curl {
 	 * @return void
 	 * @access public
 	 */
-	public function execute($url = null, $options = array(), $type = 'GET', $ssl = false)
+	public function Execute($url = null, $options = array(), $type = 'GET', $ssl = false)
 	{
 		$this->info = array();
 		$this->lastError = null;
@@ -347,7 +347,7 @@ class Curl {
 
 		if ($this->requestType != $type)
 		{
-			$this->setRequestType($type);
+			$this->SetRequestType($type);
 		}
 
 		curl_setopt($this->_rCh, CURLOPT_URL, $this->url);
@@ -356,14 +356,14 @@ class Curl {
 
 		if (is_null($this->returnHeader))
 		{
-			$this->setReturnHeader(true);
+			$this->SetReturnHeader(true);
 		}
 
-		$this->setSslVerify($ssl);
+		$this->SetSslVerify($ssl);
 
 		$this->response = curl_exec($this->_rCh);
-		$this->error();
-		$this->reset($type);
+		$this->Error();
+		$this->Reset($type);
 	}
 	
 	
@@ -373,9 +373,9 @@ class Curl {
 	 * @return void
 	 * @access public
 	 */
-	public function get($url = null, $options = array())
+	public function Get($url = null, $options = array())
 	{
-		$this->execute($url, $options);
+		$this->Execute($url, $options);
 	}
 	
 	
@@ -386,7 +386,7 @@ class Curl {
 	 * @return void
 	 * @access public
 	 */
-	public function info($opt)
+	public function Info($opt)
 	{
 		if (empty($this->info))
 		{
@@ -412,11 +412,11 @@ class Curl {
 	 * @return void
 	 * @access public
 	 */
-	public function post($url = null, $data = null, $options = array())
+	public function Post($url = null, $data = null, $options = array())
 	{
-		if ($this->setPostFields($data))
+		if ($this->SetPostFields($data))
 		{
-			$this->execute($url, $options, 'POST');
+			$this->Execute($url, $options, 'POST');
 		}
 	}
 	
@@ -428,7 +428,7 @@ class Curl {
 	 * @return void
 	 * @access public
 	 */
-	public function reset($type)
+	public function Reset($type)
 	{
 		if ('GET' != $type)
 		{
@@ -447,7 +447,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setConnectTimeout($secs)
+	public function SetConnectTimeout($secs)
 	{
 		if ($this->timeout != $secs)
 		{
@@ -469,7 +469,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setCookie($cookie)
+	public function SetCookie($cookie)
 	{
 		if ($this->cookie != $cookie)
 		{
@@ -491,7 +491,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setCookieFile($file)
+	public function SetCookieFile($file)
 	{
 		if ($this->cookieFile != $file)
 		{
@@ -514,7 +514,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setCookieJar($file)
+	public function SetCookieJar($file)
 	{
 		if ($this->cookieJar != $file)
 		{
@@ -537,9 +537,9 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setCustomRequest($type = 'GET')
+	public function SetCustomRequest($type = 'GET')
 	{
-		return $this->setRequestType($type);
+		return $this->SetRequestType($type);
 	}
 	
 	
@@ -551,7 +551,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setEncoding($encoding = "gzip")
+	public function SetEncoding($encoding = "gzip")
 	{
 		if (!empty($encoding) && !in_array($encoding, $this->encodingTypes))
 		{
@@ -583,7 +583,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setFollowLocation($bool)
+	public function SetFollowLocation($bool)
 	{
 		if ($this->followLocation != $bool)
 		{
@@ -605,7 +605,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setHttpHeader($headers)
+	public function SetHttpHeader($headers)
 	{
 		if ($this->httpHeader != $headers)
 		{
@@ -627,7 +627,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setHttpVersion($version = '')
+	public function SetHttpVersion($version = '')
 	{
 		if (!array_key_exists($version, $this->httpVersions))
 		{
@@ -656,11 +656,11 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setMaxRedirects($max)
+	public function SetMaxRedirects($max)
 	{
 		if ($this->maxRedirects != $max)
 		{
-			if ($this->setFollowLocation(true))
+			if ($this->SetFollowLocation(true))
 			{
 				if (curl_setopt($this->_rCh, CURLOPT_MAXREDIRS, $max))
 				{
@@ -688,7 +688,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setPostFields($data, $multipart = true)
+	public function SetPostFields($data, $multipart = true)
 	{
 		if ($this->postFields != $data)
 		{
@@ -719,7 +719,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setReferrer($referer)
+	public function SetReferrer($referer)
 	{
 		if ($this->referer != $referer)
 		{
@@ -741,7 +741,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setRequestType($type = 'GET')
+	public function SetRequestType($type = 'GET')
 	{
 		if ($this->requestType != $type)
 		{
@@ -769,7 +769,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setReturnHeader($bool)
+	public function SetReturnHeader($bool)
 	{
 		if ($this->returnHeader != $bool)
 		{
@@ -791,7 +791,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setUserAgent($agent)
+	public function SetUserAgent($agent)
 	{
 		if ($this->userAgent != $agent)
 		{
@@ -813,11 +813,11 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setSslVerify($bool)
+	public function SetSslVerify($bool)
 	{
-		if ($this->setSslVerifyHost($bool))
+		if ($this->SetSslVerifyHost($bool))
 		{
-			return $this->setSslVerifyPeer($bool);
+			return $this->SetSslVerifyPeer($bool);
 		}
 		return false;
 	}
@@ -830,7 +830,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setSslVerifyHost($bool)
+	public function SetSslVerifyHost($bool)
 	{
 		if ($this->sslVerifyHost != $bool)
 		{
@@ -852,7 +852,7 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function setSslVerifyPeer($bool)
+	public function SetSslVerifyPeer($bool)
 	{
 		if ($this->sslVerifyPeer != $bool)
 		{
