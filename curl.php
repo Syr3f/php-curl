@@ -32,6 +32,17 @@ class Curl {
 	 */
 	 private $_bIsHTTP = null;
 	
+	
+	/**
+	 *  Holds an HTTP status code after an execute if the URL protocol is HTTP
+	 *  or HTTPS.
+	 *
+	 *  @var string
+	 *  @access private
+	 */
+	 private $_sHTTPStatus = "";
+	 
+	
 	/**
 	 * Current `CURLOPT_COOKIE`
 	 *
@@ -451,6 +462,18 @@ class Curl {
         return false;
 	}
 	
+	
+	/**
+	 *  Method to obtain the HTTP status of the execute if _IsHTTP or _bIsHTTP
+	 *  are true.
+	 *
+	 *  @return string
+	 *  @access public
+	 */
+	 public function getHTTPStatus() {
+
+	   return $this->_sHTTPStatus;
+	 }
 	
 	/**
 	 * Execute a POST request
