@@ -75,7 +75,7 @@ class Curl {
 	 * @var array
 	 * @access private
 	 */
-	private $_asEncodingTypes = array('identity', 'deflate', 'gzip');
+	private $_asEncodingTypes = array( 'identity', 'deflate', 'gzip' );
 	
 	
 	/**
@@ -180,7 +180,7 @@ class Curl {
 	 * @var array
 	 * @access private
 	 */
-	private $_asHTTPRequestTypes = array('CONNECT', 'DELETE', 'GET', 'POST', 'PUT');
+	private $_asHTTPRequestTypes = array( 'CONNECT', 'DELETE', 'GET', 'POST', 'PUT' );
 	
 	
 	/**
@@ -262,13 +262,13 @@ class Curl {
 	 * @param undefined $options
 	 * @access public
 	 */
-	public function __construct($url = null, $options = array())
+	public function __construct( $url = null, $options = array() )
 	{
-		if (!extension_loaded('curl'))
+		if ( ! extension_loaded( 'curl' ) )
 		{
-			if (!dl('curl'))
+			if ( ! dl( 'curl' ) )
 			{
-				trigger_error('Curl: PHP was not built with --with-curl', E_USER_ERROR);
+				trigger_error( 'Curl: PHP was not built with --with-curl', E_USER_ERROR );
 				return false;
 			}
 		}
@@ -277,7 +277,7 @@ class Curl {
 
 		$this->Connect();
 
-		if (!is_null($this->_sUrl))
+		if ( ! is_null( $this->_sUrl ) )
 		{
 			$this->Execute();
 		}
@@ -292,7 +292,7 @@ class Curl {
 	 */
 	public function Close()
 	{
-		curl_close($this->_rCh);
+		curl_close( $this->_rCh );
 	}
 	
 	
@@ -305,10 +305,10 @@ class Curl {
 	 */
 	public function Connect()
 	{
-		if (!is_resource($this->_rCh))
+		if ( ! is_resource( $this->_rCh ) )
 		{
-			$this->_rCh = is_null($this->_sUrl) ? curl_init() : curl_init($this->_sUrl);
-			if (!is_resource($this->_rCh))
+			$this->_rCh = is_null( $this->_sUrl ) ? curl_init() : curl_init( $this->_sUrl );
+			if ( ! is_resource( $this->_rCh ) )
 			{
 				$this->_rCh = null;
 				return false;
@@ -326,10 +326,10 @@ class Curl {
 	 */
 	public function Error()
 	{
-		$this->_sLastError = curl_error($this->_rCh);
-		if (empty($this->_sLastError))
+		$this->_sLastError = curl_error( $this->_rCh );
+		if ( empty( $this->_sLastError ) )
 		{
-			if ((int)$this->Info('http_code') >= 400)
+			if ( ( int )$this->Info( 'http_code' ) >= 400 )
 			{
 				$this->_sLastError = $this->_asInfo['http_code'];
 			}
@@ -344,37 +344,37 @@ class Curl {
 	 * @return void
 	 * @access public
 	 */
-	public function Execute($url = null, $options = array(), $type = 'GET', $ssl = false)
+	public function Execute( $url = null, $options = array(), $type = 'GET', $ssl = false )
 	{
 		$this->_asInfo = array();
 		$this->_sLastError = null;
 		$this->_sUrl = $url;
 
-		foreach ($options as $key => $val)
+		foreach ( $options as $key => $val )
 		{
-			$method = 'set' . str_replace(" ", "", ucwords(str_replace("_", " ", $key)));
-			$this->{$method}($val);
+			$method = 'set' . str_replace( " ", "", ucwords( str_replace( "_", " ", $key ) ) );
+			$this->{$method}( $val );
 		}
 
-		if ($this->_sRequestType != $type)
+		if ( $this->_sRequestType != $type )
 		{
-			$this->SetRequestType($type);
+			$this->SetRequestType( $type );
 		}
 
-		curl_setopt($this->_rCh, CURLOPT_URL, $this->_sUrl);
-		// response as string instead of outputting (which is curl's default)
-		curl_setopt($this->_rCh, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt( $this->_rCh, CURLOPT_URL, $this->_sUrl );
+		// response as string instead of outputting (which is curl's default )
+		curl_setopt( $this->_rCh, CURLOPT_RETURNTRANSFER, true );
 
-		if (is_null($this->_bReturnHeader))
+		if ( is_null( $this->_bReturnHeader ) )
 		{
-			$this->SetReturnHeader(true);
+			$this->SetReturnHeader( true );
 		}
 
-		$this->SetSslVerify($ssl);
+		$this->SetSslVerify( $ssl );
 
-		$this->_sResponse = curl_exec($this->_rCh);
+		$this->_sResponse = curl_exec( $this->_rCh );
 		$this->Error();
-		$this->Reset($type);
+		$this->Reset( $type );
 	}
 	
 	
@@ -384,9 +384,9 @@ class Curl {
 	 * @return void
 	 * @access public
 	 */
-	public function Get($url = null, $options = array())
+	public function Get( $url = null, $options = array() )
 	{
-		$this->Execute($url, $options);
+		$this->Execute( $url, $options );
 	}
 	
 	
@@ -397,20 +397,20 @@ class Curl {
 	 * @return void
 	 * @access public
 	 */
-	public function Info($opt)
+	public function Info( $opt )
 	{
-		if (empty($this->_asInfo))
+		if ( empty( $this->_asInfo ) )
 		{
-			$this->_asInfo = curl_getinfo($this->_rCh);
-			if (false === $this->_asInfo)
+			$this->_asInfo = curl_getinfo( $this->_rCh );
+			if ( false === $this->_asInfo )
 			{
-				trigger_error('', E_USER_ERROR);
+				trigger_error( '', E_USER_ERROR );
 				return false;
 			}
 		}
-		if (!array_key_exists($opt, $this->_asInfo))
+		if ( ! array_key_exists( $opt, $this->_asInfo ) )
 		{
-			trigger_error('', E_USER_ERROR);
+			trigger_error( '', E_USER_ERROR );
 			return false;
 		}
 		return $this->_asInfo[$opt];
@@ -423,11 +423,11 @@ class Curl {
 	 * @return void
 	 * @access public
 	 */
-	public function Post($url = null, $data = null, $options = array())
+	public function Post( $url = null, $data = null, $options = array() )
 	{
-		if ($this->SetPostFields($data))
+		if ( $this->SetPostFields( $data ) )
 		{
-			$this->Execute($url, $options, 'POST');
+			$this->Execute( $url, $options, 'POST' );
 		}
 	}
 	
@@ -439,15 +439,15 @@ class Curl {
 	 * @return void
 	 * @access public
 	 */
-	public function Reset($type)
+	public function Reset( $type )
 	{
-		if ('GET' != $type)
+		if ( 'GET' != $type )
 		{
 			// reset to default 'GET' type of requests
-			curl_setopt($this->_rCh, CURLOPT_HTTPGET, true);
+			curl_setopt( $this->_rCh, CURLOPT_HTTPGET, true );
 		}
 		// force use of new connection instead of cached one
-		curl_setopt($this->_rCh, CURLOPT_FRESH_CONNECT, true);
+		curl_setopt( $this->_rCh, CURLOPT_FRESH_CONNECT, true );
 	}
 	
 	
@@ -458,11 +458,11 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetConnectTimeout($secs)
+	public function SetConnectTimeout( $secs )
 	{
-		if ($this->_iTimeout != $secs)
+		if ( $this->_iTimeout != $secs )
 		{
-		 	if (curl_setopt($this->_rCh, CURLOPT_CONNECTTIMEOUT, $secs))
+		 	if ( curl_setopt( $this->_rCh, CURLOPT_CONNECTTIMEOUT, $secs ) )
 			{
 				$this->_iTimeout = $secs;
 				return true;
@@ -480,11 +480,11 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetCookie($cookie)
+	public function SetCookie( $cookie )
 	{
-		if ($this->_sCookie != $cookie)
+		if ( $this->_sCookie != $cookie )
 		{
-			if (curl_setopt($this->_rCh, CURLOPT_COOKIE, $cookie))
+			if ( curl_setopt( $this->_rCh, CURLOPT_COOKIE, $cookie ) )
 			{
 				$this->_sCookie = $cookie;
 				return true;
@@ -502,11 +502,11 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetCookieFile($file)
+	public function SetCookieFile( $file )
 	{
-		if ($this->_sCookieFile != $file)
+		if ( $this->_sCookieFile != $file )
 		{
-			if (curl_setopt($this->_rCh, CURLOPT_COOKIEFILE, $file))
+			if ( curl_setopt( $this->_rCh, CURLOPT_COOKIEFILE, $file ) )
 			{
 				$this->_sCookieFile = $file;
 				return true;
@@ -525,11 +525,11 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetCookieJar($file)
+	public function SetCookieJar( $file )
 	{
-		if ($this->_sCookieJar != $file)
+		if ( $this->_sCookieJar != $file )
 		{
-			if (curl_setopt($this->_rCh, CURLOPT_COOKIEJAR, $file))
+			if ( curl_setopt( $this->_rCh, CURLOPT_COOKIEJAR, $file ) )
 			{
 				$this->_sCookieJar = $file;
 				return true;
@@ -548,9 +548,9 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetCustomRequest($type = 'GET')
+	public function SetCustomRequest( $type = 'GET' )
 	{
-		return $this->SetRequestType($type);
+		return $this->SetRequestType( $type );
 	}
 	
 	
@@ -562,17 +562,17 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetEncoding($encoding = "gzip")
+	public function SetEncoding( $encoding = "gzip" )
 	{
-		if (!empty($encoding) && !in_array($encoding, $this->_asEncodingTypes))
+		if ( ! empty( $encoding ) && !in_array( $encoding, $this->_asEncodingTypes ) )
 		{
-			trigger_error('', E_USER_ERROR);
+			trigger_error( '', E_USER_ERROR );
 			return false;
 		}
 
-		if ($this->_sEncoding != $encoding)
+		if ( $this->_sEncoding != $encoding )
 		{
-			if (curl_setopt($this->_rCh, CURLOPT_ENCODING, $encoding))
+			if ( curl_setopt( $this->_rCh, CURLOPT_ENCODING, $encoding ) )
 			{
 				$this->_sEncoding = $encoding;
 				return true;
@@ -594,11 +594,11 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetFollowLocation($bool)
+	public function SetFollowLocation( $bool )
 	{
-		if ($this->_bFollowLocation != $bool)
+		if ( $this->_bFollowLocation != $bool )
 		{
-			if (curl_setopt($this->_rCh, CURLOPT_FOLLOWLOCATION, $bool))
+			if ( curl_setopt( $this->_rCh, CURLOPT_FOLLOWLOCATION, $bool ) )
 			{
 				$this->_bFollowLocation = $bool;
 				return true;
@@ -616,11 +616,11 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetHttpHeader($headers)
+	public function SetHttpHeader( $headers )
 	{
-		if ($this->_asHTTPHeader != $headers)
+		if ( $this->_asHTTPHeader != $headers )
 		{
-			if (curl_setopt($this->_rCh, CURLOPT_HTTPHEADER, $headers))
+			if ( curl_setopt( $this->_rCh, CURLOPT_HTTPHEADER, $headers ) )
 			{
 				$this->_asHTTPHeader = $headers;
 				return true;
@@ -638,16 +638,16 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetHttpVersion($version = '')
+	public function SetHttpVersion( $version = '' )
 	{
-		if (!array_key_exists($version, $this->_hiHTTPVersions))
+		if ( ! array_key_exists( $version, $this->_hiHTTPVersions ) )
 		{
-			trigger_error('Curl: invalid HTTP version', E_USER_ERROR);
+			trigger_error( 'Curl: invalid HTTP version', E_USER_ERROR );
 			return false;
 		}
-		if ($this->_sHTTPVersion != $version)
+		if ( $this->_sHTTPVersion != $version )
 		{
-			if (curl_setopt($this->_rCh, CURLOPT_HTTP_VERSION, $this->_hiHTTPVersions[$version]))
+			if ( curl_setopt( $this->_rCh, CURLOPT_HTTP_VERSION, $this->_hiHTTPVersions[$version] ) )
 			{
 				$this->_sHTTPVersion = $version;
 				return true;
@@ -667,13 +667,13 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetMaxRedirects($max)
+	public function SetMaxRedirects( $max )
 	{
-		if ($this->_iMaxRedirects != $max)
+		if ( $this->_iMaxRedirects != $max )
 		{
-			if ($this->SetFollowLocation(true))
+			if ( $this->SetFollowLocation( true ) )
 			{
-				if (curl_setopt($this->_rCh, CURLOPT_MAXREDIRS, $max))
+				if ( curl_setopt( $this->_rCh, CURLOPT_MAXREDIRS, $max ) )
 				{
 					$this->_iMaxRedirects = $max;
 					return true;
@@ -699,20 +699,20 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetPostFields($data, $multipart = true)
+	public function SetPostFields( $data, $multipart = true )
 	{
-		if ($this->_sPostFields != $data)
+		if ( $this->_sPostFields != $data )
 		{
-			if (false === $multipart && is_array($data))
+			if ( false === $multipart && is_array( $data ) )
 			{
 				$_data = array();
-				foreach ($data as $key => $val)
+				foreach ( $data as $key => $val )
 				{
-					$_data[] = $key . '=' . urlencode($val);
+					$_data[] = $key . '=' . urlencode( $val );
 				}
-				$data = implode('&', $_data);
+				$data = implode( '&', $_data );
 			}
-			if (curl_setopt($this->_rCh, CURLOPT_POSTFIELDS, $data))
+			if ( curl_setopt( $this->_rCh, CURLOPT_POSTFIELDS, $data ) )
 			{
 				$this->_sPostFields = $data;
 				return true;
@@ -730,11 +730,11 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetReferrer($referer)
+	public function SetReferrer( $referer )
 	{
-		if ($this->_sReferer != $referer)
+		if ( $this->_sReferer != $referer )
 		{
-			if (curl_setopt($this->_rCh, CURLOPT_REFERER, $referer))
+			if ( curl_setopt( $this->_rCh, CURLOPT_REFERER, $referer ) )
 			{
 				$this->_sReferer = $referer;
 				return true;
@@ -752,17 +752,17 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetRequestType($type = 'GET')
+	public function SetRequestType( $type = 'GET' )
 	{
-		if ($this->_sRequestType != $type)
+		if ( $this->_sRequestType != $type )
 		{
-			if (!in_array($type, $this->_asHTTPRequestTypes))
+			if ( ! in_array( $type, $this->_asHTTPRequestTypes ) )
 			{
-				$this->_sLastError = sprintf('un-supported HTTP request type (%s)', $type);
-				trigger_error('Curl: ' . $this->_sLastError, E_USER_ERROR);
+				$this->_sLastError = sprintf( 'un-supported HTTP request type (%s)', $type );
+				trigger_error( 'Curl: ' . $this->_sLastError, E_USER_ERROR );
 				return false;
 			}
-			if (curl_setopt($this->_rCh, CURLOPT_CUSTOMREQUEST, $type))
+			if ( curl_setopt( $this->_rCh, CURLOPT_CUSTOMREQUEST, $type ) )
 			{
 				$this->_sRequestType = $type;
 				return true;
@@ -780,11 +780,11 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetReturnHeader($bool)
+	public function SetReturnHeader( $bool )
 	{
-		if ($this->_bReturnHeader != $bool)
+		if ( $this->_bReturnHeader != $bool )
 		{
-			if (curl_setopt($this->_rCh, CURLOPT_HEADER, $bool))
+			if ( curl_setopt( $this->_rCh, CURLOPT_HEADER, $bool ) )
 			{
 				$this->_bReturnHeader = $bool;
 				return true;
@@ -802,11 +802,11 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetUserAgent($agent)
+	public function SetUserAgent( $agent )
 	{
-		if ($this->_sUserAgent != $agent)
+		if ( $this->_sUserAgent != $agent )
 		{
-		 	if (curl_setopt($this->_rCh, CURLOPT_USERAGENT, $agent))
+		 	if ( curl_setopt( $this->_rCh, CURLOPT_USERAGENT, $agent ) )
 			{
 				$this->_sUserAgent = $agent;
 				return true;
@@ -824,11 +824,11 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetSslVerify($bool)
+	public function SetSslVerify( $bool )
 	{
-		if ($this->SetSslVerifyHost($bool))
+		if ( $this->SetSslVerifyHost( $bool ) )
 		{
-			return $this->SetSslVerifyPeer($bool);
+			return $this->SetSslVerifyPeer( $bool );
 		}
 		return false;
 	}
@@ -841,11 +841,11 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetSslVerifyHost($bool)
+	public function SetSslVerifyHost( $bool )
 	{
-		if ($this->_bSSLVerifyHost != $bool)
+		if ( $this->_bSSLVerifyHost != $bool )
 		{
-			if (curl_setopt($this->_rCh, CURLOPT_SSL_VERIFYHOST, $bool))
+			if ( curl_setopt( $this->_rCh, CURLOPT_SSL_VERIFYHOST, $bool ) )
 			{
 				$this->_bSSLVerifyHost = $bool;
 				return true;
@@ -863,11 +863,11 @@ class Curl {
 	 * @return bool
 	 * @access public
 	 */
-	public function SetSslVerifyPeer($bool)
+	public function SetSslVerifyPeer( $bool )
 	{
-		if ($this->_bSSLVerifyPeer != $bool)
+		if ( $this->_bSSLVerifyPeer != $bool )
 		{
-			if (curl_setopt($this->_rCh, CURLOPT_SSL_VERIFYPEER, $bool))
+			if ( curl_setopt( $this->_rCh, CURLOPT_SSL_VERIFYPEER, $bool ) )
 			{
 				$this->_bSSLVerifyPeer = $bool;
 				return true;
