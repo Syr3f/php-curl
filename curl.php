@@ -25,6 +25,14 @@ class Curl {
 	
 	
 	/**
+	 * Indicates if current URL is HTTP or HTTPS
+	 *
+	 *  @var bool | null
+	 *  @access private
+	 */
+	 private $_bIsHTTP = null;
+	
+	/**
 	 * Current `CURLOPT_COOKIE`
 	 *
 	 * @var string
@@ -361,6 +369,8 @@ class Curl {
 			$this->SetRequestType( $type );
 		}
 
+        $this->_bIsHTTP = $this->_IsHTTP();
+
 		curl_setopt( $this->_rCh, CURLOPT_URL, $this->_sUrl );
 		// response as string instead of outputting (which is curl's default )
 		curl_setopt( $this->_rCh, CURLOPT_RETURNTRANSFER, true );
@@ -373,6 +383,11 @@ class Curl {
 		$this->SetSslVerify( $ssl );
 
 		$this->_sResponse = curl_exec( $this->_rCh );
+		
+		if ( $this->_bIsHTTP === true ) {
+		    $this->_sHTTPStatus = curl_getinfo( $this->_rCh, CURLINFO_HTTP_CODE ); 
+		}
+		
 		$this->Error();
 		$this->Reset( $type );
 	}
@@ -414,6 +429,26 @@ class Curl {
 			return false;
 		}
 		return $this->_asInfo[$opt];
+	}
+	
+	
+	/**
+	 *  Indicates if current URL is HTTP or HTTPS Protocol
+	 *
+	 *  @return bool
+	 *  @access protected
+	 */
+	protected function _IsHTTP() {
+
+        if ( strlen( $this->_sUrl ) > 0 ) {
+
+            if ( strtolower( substr( $this->_sUrl, 0, 4 ) ) == 'http' || strtolower( substr( $this->_sUrl, 0, 5 ) ) == 'https' ) {
+
+                return true;
+            }
+        }
+        
+        return false;
 	}
 	
 	
