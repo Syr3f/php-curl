@@ -203,7 +203,7 @@ class Curl {
 	
 	
 	/**
-	 * undocumented variable
+	 * Execute response
 	 *
 	 * @var string
 	 * @access private
@@ -474,6 +474,19 @@ class Curl {
 
 	   return $this->_sHTTPStatus;
 	 }
+	
+	
+	/**
+	 *  Returns the response from the Execute method
+	 *
+	 *  @return string
+	 *  @access public
+	 */
+	public function getResponse() {
+
+	   return $this->_sResponse;
+	}
+	
 	
 	/**
 	 * Execute a POST request
